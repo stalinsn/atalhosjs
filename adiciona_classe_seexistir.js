@@ -1,7 +1,7 @@
 $(window).load(function() {    
     setInterval(function(){
-        if ($('p').hasClass('entrega-express')){   
-            $('.product-info').addClass('entrega-expresso');
+        if ($('.vtexIdUI-close').hasClass('ng-hide')){   
+            $('.vtexIdUI-close').removeClass('ng-hide');
         }
     }, 1000);
 });
