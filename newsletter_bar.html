@@ -1,0 +1,195 @@
+<style>
+#news, #news form{
+    width: 100%;
+    line-height: 50px;
+}
+#news form{
+    display: flex;
+/*     border: 1px solid red; */
+}
+#news form h2{
+    font-weight: bold;
+}
+#news form .newsletter_bar{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+.newsletter_bar{
+    text-transform: uppercase;
+    width: 100%;
+    display: inline-block;
+
+}
+.newsletter_bar .fields input{
+    height: 50px;
+    width: 250px;
+    text-transform: uppercase;
+    padding-left:15px;
+    margin: 10px;
+}
+
+#news .submit{
+    background-color: #343434;
+    color: #fff;
+    font-weight: bold;
+    width: 190px;
+    text-align: center;
+    cursor: pointer;
+}
+.newsletter_bar .fields input[type=radio]{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+#news .container{
+    /* display: block; */
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#news .container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+#news .checkmark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;    
+}
+#news .container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+#news .container input:checked ~ .checkmark {
+  background-color: #000;
+}
+#news .container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+.newsletter_bar .fields input[type=radio]:checked ~ checkmark{
+    background-color: #000
+}
+.checkmark:after{
+    content: "";
+    position: absolute;
+    display: none;
+}
+.newsletter_bar .fields input[type=radio]:checked ~ checkmark:after{
+    display: block;
+}
+
+.newsletter_bar .fields input[type=radio] .checkmark:after{
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+}
+#news .success{
+    display: none;
+}
+@media(max-width: 768px){
+	#news form .newsletter_bar{
+		display: block;
+		text-align: center;
+	}
+	#news form .newsletter_bar input{
+		width: 95%;
+	}
+	#news form .newsletter_bar .submit{
+		width: 95%;
+		margin: 0 auto;
+	}
+}
+</style>
+<form id="newsletter-form" action="">
+    <div class="newsletter_bar">
+        <div class="titulo">
+            <h2>
+                Fique por Dentro de Tudo
+            </h2>
+        </div>
+        <div class="fields">
+            <input type="text" id="news_nome" name="nome" placeholder="Nome"/>
+            <input type="text" id="news_sobrenome" name="sobrenome" placeholder="Sobrenome"/>
+            <input type="text" id="news_email" name="email" placeholder="Email"/>
+            <label class="container">
+                <input type="radio" id="news_genero" name="genero" value="Masculino"/>
+                <span class="checkmark"></span> M
+            </label>
+            <label class="container">
+                <input type="radio"  id="news_genero" name="genero" value="Feminino"/>
+                <span class="checkmark"></span> F
+        </label>
+        </div>
+        <div class="submit"> Enviar </div>
+        <div class="success">Seja bem-vindo a King Of Lenses, a  partir de agora você fica por dentro de todas as novidades e promoções com exclusividade. Aproveite!</div>
+    </div>
+</form>
+<script>
+var IsEmail = function(email) {
+	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return regex.test(email.trim());
+  }
+$('#news .submit').on('click', function(){
+    
+	var txtName = $('#news_nome').val();
+	var	txtEmail = $('#news_email').val().trim();
+	var txtSurname = $('#news_sobrenome').val();
+	var txtGender = $('#news_genero').val();
+    if (txtEmail == ' ') {
+		$('#news_email').addClass('empty').focus();			        
+
+	} else if (!IsEmail(txtEmail)) {
+		$('#news_email').addClass('empty').focus();        
+
+	} else {
+		var			   
+		apiUrl = '/api/dataentities/FD/documents',
+		fields = {			
+			Nome: txtName,
+            Sobrenome: txtSurname,
+            Email: txtEmail,
+			Sexo: txtGender
+		};
+
+		$.ajax({
+			'headers': {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'						
+			},
+			'url': apiUrl,
+			'async' : false,
+			'crossDomain': true,
+			'type': 'PUT',
+			'data': JSON.stringify(fields)
+
+		}).success(function(data) {				    	
+			$('.titulo').hide();		    	
+			$('.fields').hide();
+			$('.submit').hide();
+			$('.success').show();
+
+		}).fail(function(data) {
+		});				    
+	}
+});
+</script>
