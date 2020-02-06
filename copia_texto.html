@@ -1,5 +1,5 @@
 <style>
-    .text-copy{
+.text-copy{
     position: relative;
     margin-top: 2px;
 }
@@ -27,8 +27,12 @@ div#monta-url .text-copy button {
     cursor: pointer;
     outline: none;
     float: right;
-    margin-top 10px;
     width: 200px;
+}
+@media (max-width: 768px){
+    div#monta-url .text-copy button {
+        float: unset;
+     }
 }
 .text-copy .tooltiptext::after {
     /* content: ""; */
@@ -53,11 +57,16 @@ div#monta-url .text-copy button {
         <span class="tooltiptext" id="myTooltip">Copiar Link</span>Copiar URL do Carrinho
     </button>
 </div>
-
+<script>
 function copiaUrl(){
     var copyText = document.getElementById("url-carrinho");
+
     copyText.select();
+    copyText.setSelectionRange(0, 9999);
+    
     document.execCommand("copy");
+    alert('copied text' + copyText.value);
+
     var tooltip = document.getElementById("myTooltip");
     tooltip.innerHTML = "Copiado!";
 }
@@ -79,3 +88,4 @@ $(window).load(function(){
         ).appendTo(".fastContact");
     });         
 })
+</script>
